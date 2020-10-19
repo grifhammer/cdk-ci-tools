@@ -1,12 +1,12 @@
-import * as cdk from "@aws-cdk/core";
+import { Stack, Construct, StackProps, SecretValue } from "@aws-cdk/core";
 import { Pipeline, Artifact } from "@aws-cdk/aws-codepipeline";
 import { PipelineProject } from "@aws-cdk/aws-codebuild";
 import {
   GitHubSourceAction,
   CodeBuildAction,
 } from "@aws-cdk/aws-codepipeline-actions";
-export class CdkCiToolsStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+export class CdkCiToolsStack extends Stack {
+  constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
     // The code that defines your stack goes here
@@ -15,7 +15,9 @@ export class CdkCiToolsStack extends cdk.Stack {
       actionName: "GitHub_Source",
       owner: "grifhammer",
       repo: "cdk-ci-tools",
-      oauthToken: cdk.SecretValue.secretsManager("GithubAccessToken"),
+      oauthToken: SecretValue.secretsManager("GithubToken", {
+        jsonField: "token",
+      }),
       output: sourceOutput,
       branch: "develop", // default: 'master'
     });
@@ -41,6 +43,7 @@ export class CdkCiToolsStack extends cdk.Stack {
         },
       ],
     });
-    // pipeline.addStage({ stageName: "test", actions: [codebuildAction] });
+
+    pipeline.addStage({ stageName: "test", actions: [codebuildAction] });
   }
 }
