@@ -6,7 +6,7 @@ import {
 import * as cdk from "@aws-cdk/core";
 import * as CdkCiTools from "../lib/cdk-ci-tools-stack";
 
-test("Empty Stack", () => {
+test("CI Stack", () => {
   const app = new cdk.App();
   // WHEN
   const stack = new CdkCiTools.CdkCiToolsStack(app, "MyTestStack");
@@ -16,7 +16,7 @@ test("Empty Stack", () => {
       {
         Resources: {},
       },
-      MatchStyle.EXACT
+      MatchStyle.SUPERSET
     )
   );
 });

@@ -36,6 +36,12 @@ export class CdkCiToolsStack extends Stack {
       buildCommand: "npm run build",
     });
 
+    const runUnitTests = new CodeBuildAction({
+      input: sourceOutput,
+      project,
+      actionName: "unitTests",
+    });
+
     const pipeline = new Pipeline(this, "Pipeline", {
       pipelineName: "SetlistPipeline",
       stages: [
@@ -43,6 +49,10 @@ export class CdkCiToolsStack extends Stack {
           stageName: "source",
           actions: [sourceAction],
         },
+        // {
+        // stageName: "unitTest",
+        // actions: [runUnitTests],
+        // },
         {
           stageName: "build",
           actions: [buildAction],
